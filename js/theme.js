@@ -1,216 +1,283 @@
-/************************************************
-Template Name: Chivalric Boostrap Template
-Author: BoostrapMart
-Develop By: BoostrapMart
-Developer URL: http://info@bootstrapmart.com
-************************************************/
+;(function($){
+    "use strict"
+	
+	
+	var nav_offset_top = $('header').height(); 
+    /*-------------------------------------------------------------------------------
+	  Navbar 
+	-------------------------------------------------------------------------------*/
 
-(function ($) {
-    "use strict";  
-    
-    /*Show Menu*/
-    $('.menu-trigger').on('click', function(){
-        if ( $(this).hasClass('active') ){
-            $(this).removeClass('active');
-            $('#header').removeClass('menu-active')
-        }else{
-            $(this).addClass('active');
-            $('#header').addClass('menu-active')
-        }
-    });
-        
-    /*Header Sticky*/
-    $(window).scroll(function() {
-        var scroll = $(window).scrollTop();
-
-        if ( scroll >= 100 ) {
-            $("#header").addClass("add-bg")
-        } else {
-            $("#header").removeClass("add-bg")
-        }
-    }); 
-    
-    /*==========================================================================================*/
-    /*==============================Function Declaration==============================*/
-    /*Featured Post Carousel*/
-    function featuredPostCarosel(){
-        if ( $('.featured-post-carousel').length ){
-            $('.featured-post-carousel').owlCarousel({
+	//* Navbar Fixed  
+    function navbarFixed(){
+        if ( $('.header_area').length ){ 
+            $(window).scroll(function() {
+                var scroll = $(window).scrollTop();   
+                if (scroll >= nav_offset_top ) {
+                    $(".header_area").addClass("navbar_fixed");
+                } else {
+                    $(".header_area").removeClass("navbar_fixed");
+                }
+            });
+        };
+    };
+    navbarFixed();
+	
+	
+	/*----------------------------------------------------*/
+    /*  Parallax Effect js
+    /*----------------------------------------------------*/
+	function parallaxEffect() {
+    	$('.bg-parallax').parallax();
+	}
+	parallaxEffect();
+	
+	
+	/*----------------------------------------------------*/
+    /*  Testimonials Slider
+    /*----------------------------------------------------*/
+    function text_slider(){
+        if ( $('.blog_text_slider').length ){
+            $('.blog_text_slider').owlCarousel({
+                loop:true,
+                margin: 20,
                 items: 1,
-                margin: 0,
-                loop: false,
-                nav: true,
-                navContainer: '.featured-post-carousel',
-                navText: ['<i class="fa fa-angle-left"></i>','<i class="fa fa-angle-right"></i>']
+                nav: false,
+                autoplay: false,
+                smartSpeed: 1500,
+                dots:false, 
+				navContainer: '.blog_text_slider',
+                navText: ['<i class="lnr lnr-arrow-left"></i>','<i class="lnr lnr-arrow-right"></i>'],
             })
         }
     }
-    
-    /*Gallery Post*/    
-    function galleryOfPost () {
-        if( $('.gallery-of-post').length ){
-            $('.gallery-of-post').each(function(){
-                $('.gallery-of-post').owlCarousel({
-                    items: 1,
-                    margin: 0,
-                    loop: false,
-                    nav: false,
-                    dots: true
-                })
-            })
-        }
+    text_slider();
+	
+	/*----------------------------------------------------*/
+    /*  MailChimp Slider
+    /*----------------------------------------------------*/
+    function mailChimp(){
+        $('#mc_embed_signup').find('form').ajaxChimp();
     }
-    
-    /*Gallery Post*/    
-    function galleryOfPost2 () {
-        if( $('.gallery-of-post2').length ){
-            $('.gallery-of-post2').each(function(){
-                $('.gallery-of-post2').owlCarousel({
-                    items: 2,
-                    margin: 0,
-                    loop: false,
-                    nav: true,
-                    navText: ['<i class="fa fa-angle-left"></i>','<i class="fa fa-angle-right"></i>'],
-                    dots: true,
-                    responsiveClass:true,
-                    responsive:{
-                        0:{
-                            items:1,
-                            dots: false
-                        },
-                        992:{
-                            items:2
+    mailChimp();
+	
+	$('select').niceSelect();
+	
+	/*----------------------------------------------------*/
+    /*  Simple LightBox js
+    /*----------------------------------------------------*/
+    $('.imageGallery1 .light').simpleLightbox();
+
+	
+	/*----------------------------------------------------*/
+    /*  Google map js
+    /*----------------------------------------------------*/
+     
+    if ( $('#mapBox').length ){
+        var $lat = $('#mapBox').data('lat');
+        var $lon = $('#mapBox').data('lon');
+        var $zoom = $('#mapBox').data('zoom');
+        var $marker = $('#mapBox').data('marker');
+        var $info = $('#mapBox').data('info');
+        var $markerLat = $('#mapBox').data('mlat');
+        var $markerLon = $('#mapBox').data('mlon');
+        var map = new GMaps({
+        el: '#mapBox',
+        lat: $lat,
+        lng: $lon,
+        scrollwheel: false,
+        scaleControl: true,
+        streetViewControl: false,
+        panControl: true,
+        disableDoubleClickZoom: true,
+        mapTypeControl: false,
+        zoom: $zoom,
+            styles: [
+                {
+                    "featureType": "water",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "color": "#dcdfe6"
                         }
-                    }
-                })
-            })
-        }
-    }
-    
-    /*Instafeed Widget*/
-    function instafeedWidget(){
-        if( $('#instafeed').length ){
-            var userFeed = new Instafeed({
-                get: 'user',
-                tagName: 'awesome',
-                userId: '1101771199',
-                resolution: 'standard_resolution',
-                accessToken: '1101771199.1677ed0.64ed520ad0c94f358dd92dddc082c33f',
-                limit: 2,
-                template: '<div class="item"><a href="{{image}}" data-source="{{image}}" title="{{caption}}"><img src="{{image}}" alt="{{caption}}></a></div>',
-                after: function () {
-                    for (var i = 0; i < 1; i++) {
-                        var $newdiv = $('<div class="item"></div>').html('<img src="http://placehold.it/360x300">');
-                        $('#instafeed').append($newdiv)
-                    }
-                    var owl = $('#instafeed');
-                    owl.owlCarousel({
-                        items: 1,
-                        loop: true,
-                        margin: 0,
-                        nav: false,
-                        autoplay: true,
-                        animateOut: 'fadeOut',
-                        animateIn: 'fadeIn'
-                    })
-                }
-            });
-            userFeed.run()
-        }
-    }
-    
-    function zoomGallery () {
-        if ( $('#instafeed').length ){
-            $('#instafeed').magnificPopup({
-                delegate: 'a',
-                type: 'image',
-                closeOnContentClick: false,
-                closeBtnInside: false,
-                mainClass: 'mfp-with-zoom mfp-img-mobile',
-                image: {
-                    verticalFit: true,
-                    titleSrc: function(item) {
-                        return item.el.attr('title') + ' &middot; <a class="image-source-link" href="'+item.el.attr('data-source')+'" target="_blank">image source</a>'
-                    }
+                    ]
                 },
-                gallery: {
-                    enabled: true
+                {
+                    "featureType": "transit",
+                    "stylers": [
+                        {
+                            "color": "#808080"
+                        },
+                        {
+                            "visibility": "off"
+                        }
+                    ]
                 },
-                zoom: {
-                    enabled: true,
-                    duration: 300, // don't foget to change the duration also in CSS
-                    opener: function(element) {
-                        return element.find('img')
-                    }
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        },
+                        {
+                            "color": "#dcdfe6"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "color": "#ffffff"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.local",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        },
+                        {
+                            "color": "#ffffff"
+                        },
+                        {
+                            "weight": 1.8
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.local",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "color": "#d7d7d7"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        },
+                        {
+                            "color": "#ebebeb"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#a7a7a7"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "color": "#ffffff"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "color": "#ffffff"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "landscape",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        },
+                        {
+                            "color": "#efefef"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#696969"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        },
+                        {
+                            "color": "#737373"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "labels.icon",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "labels",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "color": "#d6d6d6"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "labels.icon",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {},
+                {
+                    "featureType": "poi",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "color": "#dadada"
+                        }
+                    ]
                 }
+            ]
+        });
+    }
+	
 
-            })
-        }
-    }
-    
-    /*Post Masonry*/
-    function postMasonry(){
-        if ( $('#post-masonry').length ){
-            var $container = $('#post-masonry');
-            
-            $container.imagesLoaded( function() {
-                $container.isotope({
-                  itemSelector: '.post',
-                  layoutMode: 'masonry',
-                })
-            })            
-        }
-    }
-    
-    /*Post Share*/
-    function postShare () {
-        if( $('.post-share').length ){
-            $('.post-share button').on('click', function(){
-                if ( $(this).parent().hasClass('active') ){
-                    $(this).parent().removeClass('active')
-                }else{
-                    $(this).parent().addClass('active')
-                }
-            })
-        }
-    }
-    
-    function thumbSilder(){
-          // The slider being synced must be initialized first
-        if( $('.thumbCarousel').length ){
-            $('#carousel').flexslider({
-                animation: "slide",
-                controlNav: false,
-                animationLoop: false,
-                prevText: '<i class="fa fa-caret-left"></i>',
-                nextText: '<i class="fa fa-caret-right"></i>',    
-                slideshow: false,
-                itemWidth: 98,
-                itemMargin: 10,
-                asNavFor: '#slider'
-            });
-
-            $('#slider').flexslider({
-                animation: "slide",
-                controlNav: true,
-                directionNav: false,
-                animationLoop: false,
-                slideshow: false,
-                sync: "#carousel"
-            })
-        }
-    }
-    
-    /*==========================================================================================*/
-    /*Function Call*/
-    featuredPostCarosel();
-    instafeedWidget();
-    galleryOfPost ();
-    galleryOfPost2 ();
-    postMasonry();
-    zoomGallery();
-    postShare ();
-    thumbSilder()
-    
-    
 })(jQuery)
